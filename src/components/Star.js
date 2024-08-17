@@ -1,6 +1,4 @@
-import React from "react";
-
-const Star = ({ filled, onClick }) => {
+const Star = ({ filled, onClick, onHover, onMouseLeave }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -10,6 +8,8 @@ const Star = ({ filled, onClick }) => {
       stroke="currentColor"
       className={`w-8 h-8 ${filled ? "text-yellow-500" : "text-gray-500"} cursor-pointer`}
       onClick={onClick}
+      onMouseEnter={onHover}
+      onMouseLeave={onMouseLeave}
     >
       <path
         strokeLinecap="round"
