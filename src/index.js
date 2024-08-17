@@ -5,6 +5,8 @@ import App from "./App";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Review from "./components/Review";
 import Body from "./components/Body";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const appRouter = createBrowserRouter([
   {
@@ -24,4 +26,9 @@ const appRouter = createBrowserRouter([
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<RouterProvider router={appRouter} />);
+root.render(
+  <>
+    <RouterProvider router={appRouter} />
+    <ToastContainer autoClose={3000} />
+  </>
+);
