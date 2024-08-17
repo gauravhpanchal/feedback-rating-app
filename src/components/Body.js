@@ -21,7 +21,7 @@ const Body = () => {
       </div>
       <div className="text-center w-48 mx-auto">
         <h1 className="text-4xl text-center font-bold mt-10">Reviews</h1>
-        <div className="flex justify-center gap-1 mt-2">
+        <div className="flex justify-center gap-1 mt-2 title="Average of all the reviews">
           {Array.from({ length: 5 }, (_, i) => (
             <Star key={i} filled={i < roundedRating} />
           ))}
