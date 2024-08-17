@@ -47,13 +47,17 @@ const Review = () => {
       setReviewError("");
     }
 
+    if (!valid) {
+      toast.error("Please fill all the required fields.");
+    }
+
     return valid;
   };
 
   const handleSubmit = () => {
     if (validateForm()) {
       const newReview = { rating, review, title, username };
-      setReviews([...reviews, newReview]);
+      setReviews([newReview, ...reviews]);
       toast.success("Review submitted successfully!");
       navigate("/");
     }

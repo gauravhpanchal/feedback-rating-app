@@ -1,157 +1,79 @@
-import React, { useState } from "react";
+import React from "react";
 import bagpack from "../images/bagpack.jpg";
 import Star from "./Star";
-import { useNavigate, useOutletContext } from "react-router-dom";
-import { toast } from "react-toastify";
+import { Link, useOutletContext } from "react-router-dom";
 
-const Review = () => {
-  const { reviews, setReviews } = useOutletContext();
-  const [rating, setRating] = useState(0);
-  const [hoverRating, setHoverRating] = useState(0);
-  const [review, setReview] = useState("");
-  const [title, setTitle] = useState("");
-  const [username, setUsername] = useState("");
-  const [ratingError, setRatingError] = useState("");
-  const [reviewError, setReviewError] = useState("");
-  const [titleError, setTitleError] = useState("");
-  const [usernameError, setUsernameError] = useState("");
-  const navigate = useNavigate();
+const Body = () => {
+  const { reviews } = useOutletContext();
+  const averageRating =
+    reviews.length > 0
+      ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length
+      : 0;
 
-  const validateForm = () => {
-    let valid = true;
-
-    if (!rating) {
-      setRatingError("Please select a rating.");
-      valid = false;
-    } else {
-      setRatingError("");
-    }
-
-    if (!title) {
-      setTitleError("Please enter your title.");
-      valid = false;
-    } else {
-      setTitleError("");
-    }
-
-    if (!username) {
-      setUsernameError("Please enter your username.");
-      valid = false;
-    } else {
-      setUsernameError("");
-    }
-
-    if (!review) {
-      setReviewError("Please enter your review.");
-      valid = false;
-    } else {
-      setReviewError("");
-    }
-
-    if(!valid){
-      toast.error("Please fill all the required fields.");
-    }
-
-    return valid;
-  };
-
-  const handleSubmit = () => {
-    if (validateForm()) {
-      const newReview = { rating, review, title, username };
-      setReviews([newReview,...reviews]);
-      toast.success("Review submitted successfully!");
-      navigate("/");
-    }
-  };
-
+  const roundedRating = Math.round(averageRating);
   return (
-    <>
-      <div className="flex md:flex-row flex-col md:w-1/2 mx-auto ">
-        <div className="p-4 md:p-0 md:mt-4">
-          <h1 className="md:text-4xl mt-6 text-3xl font-bold">
-            Write a Review
-          </h1>
-          <p className="md:mt-4 mt-2">
-            Your feedback will help other shoppers make good choices, and we'll
-            use it to improve our products.
-          </p>
-          <p className="underline">Review guidelines</p>
-        </div>
-        <div className="md:m-0 m-4">
-          <img
-            src={bagpack}
-            alt="bagpack"
-            className="md:size-32 md:mt-10 mx-auto rounded-xl"
-          />
-        </div>
+    <div className="flex flex-col w-full md:w-1/2 mx-auto mt-10">
+      <div className="mx-auto w-80  rounded-xl hover:ring-8 hover:ring-slate-100 hover:bg-slate-100">
+        <img src={bagpack} alt="bagpack" className="w-80 h-auto rounded-xl" />
+        <h2 className="text-xl text-center font-medium mt-1 pb-4">
+          Beige and ebony GG Supreme canvas backpack
+        </h2>
       </div>
-      <div className="mt-8 flex flex-col md:w-1/2 mx-auto ">
-        <h1 className="text-2xl font-semibold">Ratings *</h1>
-        <div className="flex gap-1 mt-2">
-          {/* {Array.from({ length: 5 }, (_, i) => (
-            <Star
-              key={i}
-              filled={i < rating}
-              onClick={() => setRating(i + 1)}
-            />
-          ))} */}
+      <div className="text-center w-48 mx-auto">
+        <h1 className="text-4xl text-center font-bold mt-10">Reviews</h1>
+        <div className="flex justify-center gap-1 mt-2" title="Average of all the reviews">
           {Array.from({ length: 5 }, (_, i) => (
-          <Star
-            key={i}
-            filled={i < (hoverRating || rating)}
-            onClick={() => setRating(i + 1)}
-            onHover={() => setHoverRating(i + 1)}
-            onMouseLeave={() => setHoverRating(0)}
-          />
-        ))}
+            <Star key={i} filled={i < roundedRating} />
+          ))}
         </div>
-        {ratingError && <p className="text-red-500 mt-2">{ratingError}</p>}
-
-        <h1 className="text-2xl mt-6 font-semibold">Username *</h1>
-        <input
-          type="text"
-          className="border p-2 rounded-md mt-3"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        {usernameError && <p className="text-red-500 mt-2">{usernameError}</p>}
-
-        <h1 className="text-2xl mt-6 font-semibold">Review Title *</h1>
-        <input
-          type="text"
-          className="border p-2 rounded-md mt-3"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        {titleError && <p className="text-red-500 mt-2">{titleError}</p>}
-
-        <h1 className="text-2xl mt-6 font-semibold">Review *</h1>
-        <textarea
-          name="review"
-          className="border rounded-xl mt-4 p-3"
-          id="review"
-          cols="60"
-          rows="4"
-          value={review}
-          onChange={(e) => setReview(e.target.value)}
-        ></textarea>
-        {reviewError && <p className="text-red-500 mt-2">{reviewError}</p>}
-
-        <p className="text-slate-500 mt-2">
-          Describe what you liked, what you didn't like, and other key things
-          shoppers should know. The most helpful reviews are 200 characters or
-          more.
-        </p>
-
-        <button
-          onClick={handleSubmit}
-          className="w-full border rounded-lg mb-10 bg-blue-600 hover:bg-blue-700 shadow-md text-white text-xl py-3 mt-4"
-        >
-          Submit Your Review
-        </button>
+        <div className="flex text-gray-600 justify-around text-sm font-bold">
+          <p>{Math.ceil(averageRating.toFixed(1))} Stars</p>
+          <p>
+            {reviews.length} {reviews.length === 1 ? "Review" : "Reviews"}
+          </p>
+        </div>
       </div>
-    </>
+      <Link
+        to="/review"
+        className="mt-10 border shadow-lg px-10 py-3 md:w-1/2 mx-auto text-center font-medium rounded-lg hover:bg-black hover:text-white"
+      >
+        WRITE A REVIEW
+      </Link>
+      <div className="mt-8">
+        {reviews.length===0?(<p className="text-xl text-center text-[#cacaca]">No Reviews Yet</p>):(reviews.map((review, index) => (
+          <div key={index} className="mb-4 p-4 border rounded-lg">
+            <div className="flex gap-1 mb-3 items-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="size-8"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                />
+              </svg>
+              <h3 className="font-semibold text-gray-700 text-base">
+                {review.username}
+              </h3>
+            </div>
+
+            <div className="flex gap-1">
+              {Array.from({ length: 5 }, (_, i) => (
+                <Star key={i} filled={i < review.rating} />
+              ))}
+            </div>
+            <h3 className="font-semibold text-xl mt-4">{review.title}</h3>
+            <p className="font-medium text-lg text-gray-600">{review.review}</p>
+          </div>
+        )))}
+      </div>
+    </div>
   );
 };
 
-export default Review;
+export default Body;
